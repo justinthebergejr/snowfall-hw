@@ -1,8 +1,8 @@
 # Was there more snow back then?
 
-**Report: https://justi.zone/snowfall/**
+**Live GitHub Pages report: https://justinthebergejr.github.io/snowfall-hw/**
 
-[Original GitHub Pages URL](https://justinthebergejr.github.io/snowfall-hw/)
+Custom-domain target: https://justi.zone/snowfall/ (routing setup required; see below).
 
 A reproducible test of whether New England had less annual snowfall in
 **2000–2019** than in **1940–1999**, using NOAA's Global Historical Climatology
@@ -74,19 +74,44 @@ belongs in this repository.
 
 ## Deployment
 
-The custom-domain report is published as the `snowfall/` directory in
-[`justinsuf.github.io`](https://github.com/justinthebergejr/justinsuf.github.io),
-which already serves `justi.zone`. This leaves the existing homepage and DNS unchanged.
-After updating this report, sync its publication files into a checkout of that site:
+All report files stay in **this repository**. Nothing is copied into the
+`justi.zone` website repository. GitHub Pages publishes `docs/` directly.
+
+### Serve it at justi.zone/snowfall/
+
+GitHub Pages custom-domain settings accept hostnames, not URL paths. A Cloudflare
+Worker route forwards `/snowfall/` requests to this repository's GitHub Pages site,
+keeping the custom URL in the address bar. Other paths continue to the main site.
+No report files, workflow, or DNS change is needed in the main website repository.
+
+The Worker and its GitHub deployment workflow are also kept **here**:
+
+- `routing/worker.mjs` — narrow path proxy; does not forward domain cookies or authorization.
+- `routing/wrangler.jsonc` — Worker configuration and `justi.zone/snowfall*` route.
+- `.github/workflows/deploy-routing.yml` — manually run **Deploy snowfall route**.
+
+One-time setup by the Cloudflare account owner:
+
+1. Keep `justi.zone`'s existing DNS record proxied through Cloudflare.
+2. Create a Cloudflare API token with **Account → Workers Scripts → Edit** and
+   **Zone → Workers Routes → Edit**, scoped to the appropriate account and the
+   `justi.zone` zone. Include **Zone → Zone → Read** for the zone-name lookup.
+3. In **this repository's Settings → Secrets and variables → Actions**, add
+   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Do not commit or send tokens in chat.
+4. Open **Actions → Deploy snowfall route → Run workflow**.
+
+After that, normal `docs/` commits deploy through GitHub Pages and appear at
+`justi.zone/snowfall/` through the proxy. Only changes to the routing code itself
+require rerunning the routing workflow. No Cloudflare credentials were available
+when this configuration was prepared, so the Worker has **not yet been deployed**.
+
+Check the router locally with Node 22+:
 
 ```sh
-python scripts/sync_domain.py /path/to/justinsuf.github.io
+node --test tests/router.test.mjs
 ```
 
-Review, commit, and push the website repository to deploy those updates.
-This copies only the small publication files; it does not delete existing files.
-
-The original project URL remains available independently:
+### GitHub Pages setup
 
 GitHub repository **Settings → Pages → Deploy from a branch → main → /docs**.
 The site has a `.nojekyll` file and needs no compilation.
