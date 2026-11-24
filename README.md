@@ -101,6 +101,9 @@ and requires permission to administer Pages. GitHub may take a few minutes to de
 
 ## Sources
 
+- [Design research and redesign rationale](notes/design-research.md): sources,
+  findings, and how they informed the page. The redesign adds responsive charts,
+  a year explorer, and an uncertainty plot without changing the analysis.
 - [GHCN-Daily overview](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily)
 - [NOAA format/flags documentation](https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt)
 - Menne et al. (2012), *An Overview of the Global Historical Climatology
