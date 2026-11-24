@@ -1,6 +1,8 @@
 # Was there more snow back then?
 
-**Report: https://justinthebergejr.github.io/snowfall-hw/**
+**Report: https://justi.zone/snowfall/**
+
+[Original GitHub Pages URL](https://justinthebergejr.github.io/snowfall-hw/)
 
 A reproducible test of whether New England had less annual snowfall in
 **2000–2019** than in **1940–1999**, using NOAA's Global Historical Climatology
@@ -71,6 +73,20 @@ in the browser. No dependency directory, site build output, or large data file
 belongs in this repository.
 
 ## Deployment
+
+The custom-domain report is published as the `snowfall/` directory in
+[`justinsuf.github.io`](https://github.com/justinthebergejr/justinsuf.github.io),
+which already serves `justi.zone`. This leaves the existing homepage and DNS unchanged.
+After updating this report, sync its publication files into a checkout of that site:
+
+```sh
+python scripts/sync_domain.py /path/to/justinsuf.github.io
+```
+
+Review, commit, and push the website repository to deploy those updates.
+This copies only the small publication files; it does not delete existing files.
+
+The original project URL remains available independently:
 
 GitHub repository **Settings → Pages → Deploy from a branch → main → /docs**.
 The site has a `.nojekyll` file and needs no compilation.
